@@ -1,0 +1,4 @@
+# Add these to your requirements (requirements.txt or requirements-dev.txt)
+streamlit>=1.20
+altair>=4.2.0
+# (pandas, numpy are already used; ensure they are present)

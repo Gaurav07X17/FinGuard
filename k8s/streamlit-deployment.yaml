@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finguard-streamlit
+  labels:
+    app: finguard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finguard
+  template:
+    metadata:
+      labels:
+        app: finguard
+    spec:
+      containers:
+        - name: streamlit
+          image: <YOUR_REGISTRY>/finguard:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8501
+          env:
+            - name: STREAMLIT_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: finguard-secret
+                  key: STREAMLIT_AUTH_TOKEN
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finguard-service
+spec:
+  selector:
+    app: finguard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8501
+  type: LoadBalancer
