@@ -1,166 +1,51 @@
-Here is a production-grade **`README.md`** tailored specifically for **FinGuard**. It covers the architecture, setup, CLI/UI usage, testing, and deployment steps clearly.
+# FinGuard
 
----
+Portfolio managers and self-directed investors often know something feels "off" about a
+portfolio's risk profile long before they can quantify it. FinGuard closes that gap: upload a
+portfolio, ask a plain-English question — *"how risky is this?"*, *"what's my worst-case
+daily loss?"*, *"how would this have performed in a bad month?"* — and get back a calculated,
+explained answer, not a dashboard you have to interpret yourself.
 
-```markdown name=README.md
-# 🛡️ FinGuard — AI-Driven Financial Risk Engine
+## What it does
 
-**FinGuard** is a production-grade, modular financial risk engine that bridges raw financial time-series data, rigorous statistical risk metrics, and Large Language Model (LLM) query interpretation. 
+- Accepts a portfolio as an Excel upload (holdings, prices, or returns)
+- Answers risk questions in natural language, backed by real calculations — not
+  approximations or LLM guesswork
+- Explains *why* a number matters, not just what it is
 
-By enforcing strict separation between **data ingestion**, **deterministic mathematical calculations**, and **natural language tooling**, FinGuard guarantees mathematical accuracy while offering an intuitive conversational interface.
+## Metrics calculated
 
----
+| Metric | What it tells you |
+|---|---|
+| Volatility | How much the portfolio's returns swing, annualized |
+| Sharpe Ratio | Return earned per unit of risk taken, vs. a risk-free baseline |
+| Value at Risk (VaR) | The most you'd expect to lose in a single day, at a given confidence level |
+| Max Drawdown | The worst peak-to-trough decline the portfolio has experienced |
 
-## 🏗️ Architecture Overview
+## Status
 
-FinGuard is built with a layered, decoupled design contract:
+Early build. Calculation engine (the core risk math) is complete and tested. File ingestion,
+the natural-language layer, and the UI are in progress.
 
-```text
-  [ User Upload / Prompt ]
-             │
-             ▼
-┌──────────────────────────┐
-│  Phase 5: Streamlit UI   │ ──► Interactive Web Dashboard & Chat Interface
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│  Phase 3: Data Ingestion │ ──► CSV/XLSX Parser, Auto-Mapping, & Return Conversion
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│  Phase 4: LLM Tooling    │ ──► OpenAI-Style Function Schemas & Validated Wrappers
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│  Phase 2: Risk Engine    │ ──► Pure, Validated Risk Math (Sharpe, Vol, VaR, Drawdown)
-└──────────────────────────┘
+## Project structure
 
 ```
-
----
-
-## ⚡ Key Features
-
-* **Deterministic Math Engine:** Pure NumPy/SciPy statistical models for Volatility, Sharpe Ratio, Value at Risk (Historical & Parametric), and Max Drawdown.
-* **Safe LLM Function Calling:** LLM tools return standardized payloads `{"value": float, "interpretation": str}` to prevent mathematical hallucinations.
-* **Robust Data Pipeline:** Auto-detects delimiters, character encodings, and column structures for `.csv` and `.xlsx` files with strict `NaN` rejection policies.
-* **Interactive Dashboard:** Built with Streamlit for file previewing, parameter tweaking, and interactive visual reporting.
-* **CI/CD Enforced:** Matrix unit testing across Python 3.10 and 3.11 with zero live LLM API keys required for testing.
-
----
-
-## 🚀 Quick Start
-
-### 1. Prerequisites
-
-* **Python 3.10** or higher
-* `pip` and `venv`
-
-### 2. Installation
-
-Clone the repository and set up a virtual environment:
-
-```bash
-# Clone repository
-git clone [https://github.com/your-username/finguard.git](https://github.com/your-username/finguard.git)
-cd finguard
-
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements-dev.txt
-
-```
-
----
-
-## 💻 Running the Application
-
-### Launch Streamlit Web UI (Phase 5)
-
-To launch the interactive dashboard:
-
-```bash
-streamlit run phase5/streamlit_app.py
-
-```
-
-Open [http://localhost:8501](http://localhost:8501) in your browser to upload files, map columns, run calculations, and export JSON reports.
-
----
-
-## 🧪 Testing
-
-FinGuard maintains strict testing standards. Run the entire test suite locally:
-
-```bash
-# Run all unit tests quietly
-pytest -q
-
-# Run specific phase test suites
-pytest phase3/tests/test_ingest.py
-pytest phase4/tests/test_llm_tools.py
-
-```
-
----
-
-## 📊 Core Risk Metrics
-
-| Metric | Code Module | Description |
-| --- | --- | --- |
-| **Annualized Sharpe Ratio** | `phase4.tool_wrappers.calculate_sharpe` | Risk-adjusted return using configurable risk-free rates and periods. |
-| **Annualized Volatility** | `phase4.tool_wrappers.calculate_volatility` | Standard deviation of periodic returns scaled by periods per year. |
-| **Value at Risk (VaR)** | `phase4.tool_wrappers.calculate_var` | 1-day portfolio risk calculation via **Historical Percentile** or **Parametric (Gaussian)** methods. |
-| **Maximum Drawdown** | `phase2.risk_metrics.max_drawdown` | Peak-to-trough decline percentage over the given timeframe. |
-
----
-
-## 📂 Repository Structure
-
-```text
-finguard/
-├── .github/
-│   └── workflows/
-│       └── ci.yml             # GitHub Actions CI matrix workflow
-├── phase2/                    # Statistical calculation engine
-│   └── risk_metrics.py
-├── phase3/                    # Ingestion, auto-mapping, & return conversion
-│   ├── ingest.py
-│   ├── mapping.py
-│   ├── convert.py
-│   └── tests/
-├── phase4/                    # LLM tools, prompts, & function wrappers
-│   ├── llm_tools.py
-│   ├── tool_wrappers.py
-│   ├── system_prompt.txt
-│   └── tests/
-├── phase5/                    # User interface & orchestrator
-│   └── streamlit_app.py
-├── requirements-dev.txt       # Project dependencies
+FinGuard/
+├── src/
+│   └── risk_metrics.py       # Core calculation engine
+├── tests/
+│   └── test_risk_metrics.py  # Validation tests
+├── requirements.txt
 └── README.md
-
 ```
 
----
+## Scope
 
-## 🛡️ Guardrails & Limits
+This is a deliberately right-sized build — a single Streamlit app, not a multi-service
+platform. Explicitly out of scope: web scraping, vector databases, RAG, and multi-user
+accounts. The goal is a focused tool that does one thing — portfolio risk Q&A — well.
 
-* **Maximum File Size:** 10 MB limit on raw price file uploads.
-* **Row Cap:** 100,000 max row ingestion limit.
-* **Strict NaN Handling:** Default `'reject'` policy halts processing on incomplete series to protect against metric corruption.
+## Tech stack
 
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-```
-
-```
+Python, Pandas/NumPy for calculations, LLM function-calling for the natural-language layer,
+Streamlit for the interface.
