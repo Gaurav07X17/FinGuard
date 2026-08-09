@@ -118,3 +118,28 @@ def get_tool_names() -> set:
         set[str]: valid tool names.
     """
     return {tool["name"] for tool in TOOL_DEFINITIONS}
+
+
+def get_tool_definitions_gemini() -> list:
+    """
+    Return the tool schemas converted to Gemini's function-declaration format.
+
+    Gemini's Interactions API expects each tool as a flat dict with a
+    "type": "function" key and "parameters" instead of Anthropic's
+    "input_schema" — otherwise the same JSON Schema content. This converts
+    TOOL_DEFINITIONS once so both providers can be supported from the same
+    source of truth without duplicating the schema descriptions.
+
+    Returns:
+        list[dict]: tool definitions in Gemini function-declaration format,
+            ready to pass as the `tools` parameter in an Interactions API call.
+    """
+    gemini_tools = []
+    for tool in TOOL_DEFINITIONS:
+        gemini_tools.append({
+            "type": "function",
+            "name": tool["name"],
+            "description": tool["description"],
+            "parameters": tool["input_schema"],
+        })
+    return gemini_tools

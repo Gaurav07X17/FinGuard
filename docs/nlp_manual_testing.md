@@ -1,18 +1,18 @@
 # NLP Layer — Manual Verification
 
-`nlp_engine.py` makes live calls to the Claude API, so it's not covered by the
+`nlp_engine.py` makes live calls to the Gemini API, so it's not covered by the
 automated test suite (`tests/test_tool_wrappers.py` covers everything that
 *doesn't* need a key: schemas, argument validation, error handling).
 
 To manually verify the full question -> tool call -> answer loop once you
-have an `ANTHROPIC_API_KEY`:
+have a `GEMINI_API_KEY` (free, no card required, from https://aistudio.google.com/apikey):
 
 ```python
 import sys
 sys.path.insert(0, "src")
 
 import os
-os.environ["ANTHROPIC_API_KEY"] = "your-key-here"  # or set it in your shell
+os.environ["GEMINI_API_KEY"] = "your-key-here"  # or set it in your shell
 
 import numpy as np
 import pandas as pd
