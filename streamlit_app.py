@@ -56,17 +56,19 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-    --bg: #0A0E1A;
-    --surface: #131828;
-    --surface-2: #1B2238;
-    --border: #2A3352;
-    --text: #E7E9F2;
-    --text-dim: #9AA3BF;
-    --accent: #C9A227;
-    --accent-soft: rgba(201, 162, 39, 0.14);
-    --risk-low: #4ADE80;
-    --risk-mod: #FBBF24;
-    --risk-high: #F87171;
+    --bg: #F1E9D8;
+    --surface: #EAE0C8;
+    --surface-2: #E2D5B6;
+    --border: #C9B98F;
+    --text: #2A2118;
+    --text-dim: #6B5D45;
+    --accent: #1F3D2B;
+    --accent-soft: rgba(31, 61, 43, 0.09);
+    --brass: #A6832E;
+    --brass-soft: rgba(166, 131, 46, 0.14);
+    --risk-low: #4B7A52;
+    --risk-mod: #A6782E;
+    --risk-high: #A34430;
 }
 
 .stApp {
@@ -77,34 +79,43 @@ st.markdown("""
 
 h1, h2, h3 { font-family: 'Fraunces', serif !important; color: var(--text) !important; }
 
+/* Streamlit auto-adds a link/anchor icon to every heading (native or raw HTML)
+   for deep-linking. It reads as a stray cursor/icon artifact in a polished UI,
+   so it's hidden globally here rather than left to appear on hover. */
+[data-testid="stHeaderActionElements"] { display: none !important; }
+
 .fg-hero {
     display: flex;
     align-items: center;
     gap: 0.9rem;
     padding: 1.6rem 0 0.4rem 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--accent);
     margin-bottom: 1.6rem;
 }
 .fg-hero .badge {
     width: 52px; height: 52px;
     border-radius: 50%;
-    background: var(--accent-soft);
-    border: 1.5px solid var(--accent);
+    background: var(--brass-soft);
+    border: 1.5px solid var(--brass);
     display: flex; align-items: center; justify-content: center;
     font-size: 1.5rem;
-    box-shadow: 0 4px 14px rgba(201, 162, 39, 0.18), inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow: 0 4px 14px rgba(166, 131, 46, 0.2), inset 0 1px 0 rgba(255,255,255,0.3);
     flex-shrink: 0;
 }
-.fg-hero h1 { font-size: 2.1rem; margin: 0; line-height: 1.1; font-weight: 600; }
+.fg-hero .fg-title {
+    font-family: 'Fraunces', serif;
+    font-size: 2.1rem; margin: 0; line-height: 1.1; font-weight: 600;
+    color: var(--text);
+}
 .fg-hero p { color: var(--text-dim); margin: 0.2rem 0 0 0; font-size: 0.98rem; }
 
 .fg-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 8px;
     padding: 1.3rem 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+    box-shadow: 0 6px 18px rgba(60, 45, 20, 0.12), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .fg-metric-grid {
@@ -114,17 +125,17 @@ h1, h2, h3 { font-family: 'Fraunces', serif !important; color: var(--text) !impo
     margin: 0.4rem 0 1.2rem 0;
 }
 .fg-metric-card {
-    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    background: linear-gradient(180deg, var(--surface), var(--surface-2));
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 1rem 1.1rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 14px rgba(60, 45, 20, 0.14), inset 0 1px 0 rgba(255,255,255,0.4);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .fg-metric-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    box-shadow: 0 8px 22px rgba(60, 45, 20, 0.2);
 }
 .fg-metric-label {
     font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
@@ -141,34 +152,34 @@ h1, h2, h3 { font-family: 'Fraunces', serif !important; color: var(--text) !impo
     padding: 0.15rem 0.55rem; border-radius: 20px;
     font-family: 'IBM Plex Mono', monospace;
 }
-.tag-low  { background: rgba(74, 222, 128, 0.14); color: var(--risk-low); }
-.tag-mod  { background: rgba(251, 191, 36, 0.14); color: var(--risk-mod); }
-.tag-high { background: rgba(248, 113, 113, 0.14); color: var(--risk-high); }
+.tag-low  { background: rgba(75, 122, 82, 0.14); color: var(--risk-low); }
+.tag-mod  { background: rgba(166, 120, 46, 0.14); color: var(--risk-mod); }
+.tag-high { background: rgba(163, 68, 48, 0.14); color: var(--risk-high); }
 
 .fg-section-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--accent); margin-bottom: 0.3rem;
+    color: var(--brass); margin-bottom: 0.3rem;
 }
 
-.stChatMessage { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 12px !important; }
+.stChatMessage { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; }
 
 [data-testid="stFileUploader"] {
     border: 1.5px dashed var(--border);
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 0.5rem;
     background: var(--surface);
 }
 
 .stButton > button {
     background: var(--accent) !important;
-    color: #14110A !important;
+    color: #F1E9D8 !important;
     border: none !important;
     font-weight: 600 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 14px rgba(201, 162, 39, 0.25);
+    border-radius: 6px !important;
+    box-shadow: 0 4px 14px rgba(31, 61, 43, 0.25);
 }
-.stButton > button:hover { box-shadow: 0 6px 20px rgba(201, 162, 39, 0.4); }
+.stButton > button:hover { box-shadow: 0 6px 20px rgba(31, 61, 43, 0.4); }
 
 .fg-quota { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--text-dim); }
 </style>
@@ -217,7 +228,7 @@ st.markdown("""
 <div class="fg-hero">
     <div class="badge">🛡️</div>
     <div>
-        <h1>FinGuard</h1>
+        <div class="fg-title">FinGuard</div>
         <p>Upload a portfolio, ask a risk question in plain English, get a calculated answer.</p>
     </div>
 </div>
